@@ -8,5 +8,4 @@ public interface ISRepository<T> where T : BaseEntity<Guid>
     Task CreateAsync(T data);
     Task UpdateAsync(T data);
     Task DeleteAsync(Guid id, string type);
-
 }
