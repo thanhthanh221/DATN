@@ -20,5 +20,4 @@ public class HistorySmartFarmController : ControllerBase
         await historyRepository.CreateAsync(history);
         return Ok();
     }
-
 }

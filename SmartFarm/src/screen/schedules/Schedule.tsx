@@ -6,35 +6,87 @@ import {IconButton} from '../../components';
 type Props = {
   navigation: any;
 };
+export interface ScheduleSmartFarm {
+  id: number;
+  statusSchedule: number;
+  infomations: Action[];
+  dateTimeAction: Date;
+  status: boolean;
+}
+export interface Action {
+  infomation: string;
+  status: boolean;
+}
 
 const Schedule: React.FC<Props> = ({navigation}) => {
-  const scheduleAll = [
+  const scheduleAll: ScheduleSmartFarm[] = [
     {
       id: 1,
-      title: ['Bật máy bơm nước', 'Tắt rạp màn chiếu'],
-      timeSchedule: new Date(2024, 11, 28, 11, 30),
+      statusSchedule: 1,
+      infomations: [
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+      ],
+      dateTimeAction: new Date(2024, 11, 28, 11, 30),
       status: true,
     },
     {
       id: 2,
-      title: ['Bật máy bơm nước', 'Tắt rạp màn chiếu'],
-      timeSchedule: new Date(2024, 11, 28, 11, 30),
+      statusSchedule: 2,
+      infomations: [
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+      ],
+      dateTimeAction: new Date(2024, 11, 28, 11, 30),
       status: true,
     },
     {
       id: 3,
-      title: ['Bật máy bơm nước', 'Tắt rạp màn chiếu'],
-      timeSchedule: new Date(2024, 11, 28, 11, 30),
+      statusSchedule: 2,
+      infomations: [
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+      ],
+      dateTimeAction: new Date(2024, 11, 28, 11, 30),
       status: true,
     },
     {
       id: 4,
-      title: ['Bật máy bơm nước', 'Tắt rạp màn chiếu'],
-      timeSchedule: new Date(2024, 11, 28, 11, 30),
+      statusSchedule: 2,
+      infomations: [
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+        {
+          infomation: 'Bật máy bơm nước',
+          status: true,
+        },
+      ],
+      dateTimeAction: new Date(2024, 11, 28, 11, 30),
       status: true,
     },
   ];
-  const [schedulePage, setSchedule] = React.useState<[]>([]);
+  const [schedulePage, setSchedule] =
+    React.useState<ScheduleSmartFarm[]>(scheduleAll);
 
   return (
     <View>
@@ -128,7 +180,13 @@ const Schedule: React.FC<Props> = ({navigation}) => {
             />
 
             {/* Thông tin lịch */}
-            <Text style={{}}>Thông tin:</Text>
+            <Text
+              style={{
+                marginLeft: SIZES.radius * 1.4,
+                fontSize: 15,
+              }}>
+              Thông tin:
+            </Text>
 
             <View
               style={{

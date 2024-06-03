@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebServer.Dto;
 using WebServer.Models;
 using WebServer.Repositories;
 
@@ -25,14 +26,20 @@ public class ScheduleSmartFarmController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<ScheduleSmartFarm>> GetCheduleAsync(int take, int skip)
     {
-        var schedule = (await scheduleRepository.GetAllAsync(nameof(ScheduleSmartFarm))).Skip(skip).Take(take);
+        var schedule = await scheduleRepository.GetAllAsync(nameof(ScheduleSmartFarm));
         return Ok(schedule);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ScheduleSmartFarm>> CreateCheduleAsync(ScheduleSmartFarm schedule)
+    public async Task<ActionResult> CreateCheduleAsync(CreateSmartFarmDto schedule)
     {
-        await scheduleRepository.CreateAsync(schedule);
+        ScheduleSmartFarm scheduleSmart = new() {
+            Id = Guid.NewGuid(),
+            StatusSchedule = (StatusSchedule)schedule.StatusSchedule,
+            Infomations = schedule.Infomations,
+            DateTimeAction = DateTime.Now
+        };
+        await scheduleRepository.CreateAsync(scheduleSmart);
         return Ok();
     }
 
@@ -42,5 +49,4 @@ public class ScheduleSmartFarmController : ControllerBase
         await scheduleRepository.UpdateAsync(schedule);
         return Ok();
     }
-
 }
