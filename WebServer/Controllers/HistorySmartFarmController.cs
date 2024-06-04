@@ -14,8 +14,16 @@ public class HistorySmartFarmController : ControllerBase
         this.historyRepository = historyRepository;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<HistorySmartFarm>> GetHistoryAsync(int skip, int take)
+    {
+        var histories = (await historyRepository.GetAllAsync(nameof(HistorySmartFarm)))
+                        .Skip(skip).Take(take);
+        return Ok(histories);
+    }
+
     [HttpPost]
-    public async Task<ActionResult<EnviromentSmartFarm>> GetEnviromentAsync(HistorySmartFarm history)
+    public async Task<ActionResult<HistorySmartFarm>> CreateHistoryAsync(HistorySmartFarm history)
     {
         await historyRepository.CreateAsync(history);
         return Ok();
