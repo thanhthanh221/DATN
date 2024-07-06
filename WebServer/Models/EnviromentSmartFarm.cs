@@ -19,4 +19,8 @@ public class EnviromentSmartFarm : BaseEntity<Guid>
         AirHumidity = airHumidity;
         DatimeUpdate = DateTime.Now;
     }
+
+    public EnviromentSmartFarm()
+    {
+    }
 }

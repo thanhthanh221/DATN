@@ -10,9 +10,14 @@ namespace WebServer.Controllers;
 public class ScheduleSmartFarmController : ControllerBase
 {
     private readonly ISRepository<ScheduleSmartFarm> scheduleRepository;
+    private readonly ILogger<ScheduleSmartFarmController> logger;
 
-    public ScheduleSmartFarmController(ISRepository<ScheduleSmartFarm> scheduleRepository)
+    public ScheduleSmartFarmController(
+        ISRepository<ScheduleSmartFarm> scheduleRepository,
+        ILogger<ScheduleSmartFarmController> logger
+        )
     {
+        this.logger = logger;
         this.scheduleRepository = scheduleRepository;
     }
 
@@ -27,7 +32,8 @@ public class ScheduleSmartFarmController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<ScheduleSmartFarm>> GetCheduleAsync(int take, int skip)
     {
-        var schedule = await scheduleRepository.GetAllAsync(nameof(ScheduleSmartFarm));
+            var schedule = (await scheduleRepository.GetAllAsync(nameof(ScheduleSmartFarm)))
+                            .OrderByDescending(s => s.DateTimeAction);
         return Ok(schedule);
     }
 
@@ -37,16 +43,35 @@ public class ScheduleSmartFarmController : ControllerBase
         ScheduleSmartFarm scheduleSmart = new()
         {
             Id = Guid.NewGuid(),
-            StatusSchedule = (StatusSchedule)schedule.StatusSchedule,
+            StatusSchedule = schedule.StatusSchedule,
             Infomations = schedule.Infomations,
-            DateTimeAction = DateTime.Now
+            DateTimeAction = DateTime.Parse(schedule.DateTimeAction)
         };
         await scheduleRepository.CreateAsync(scheduleSmart);
+
+        logger.LogInformation("Create new Schedule");
+        Console.WriteLine(schedule.DateTimeAction);
+
         return Ok();
     }
 
     [HttpPut]
     public async Task<ActionResult> UpdateCheduleAsync(
+                                    [FromQuery] Guid scheduleId,
+                                    [Required][Range(0, 3)] StatusSchedule statusSchedule)
+    {
+        var schedule = await scheduleRepository.GetAsync(scheduleId, nameof(ScheduleSmartFarm));
+
+        if (schedule is null) return BadRequest();
+
+        schedule.StatusSchedule = (int)statusSchedule;
+        await scheduleRepository.UpdateAsync(schedule);
+
+        return Ok();
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> CancelCheduleAsync(
                                     [FromQuery] Guid scheduleId,
                                     [Required][Range(1, 4)] StatusSchedule statusSchedule)
     {
@@ -54,7 +79,7 @@ public class ScheduleSmartFarmController : ControllerBase
 
         if (schedule is null) return BadRequest();
 
-        schedule.StatusSchedule = statusSchedule;
+        schedule.StatusSchedule = (int)statusSchedule;
         await scheduleRepository.UpdateAsync(schedule);
 
         return Ok();

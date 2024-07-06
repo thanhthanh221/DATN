@@ -4,6 +4,8 @@ import Scripts from "./scripts/Scripts";
 import Environment from "./environment/Environment";
 import RemoteControl from "./remoteControl/RemoteControl";
 import Schedule from "./schedules/Schedule";
+import AddSchedule from './schedules/AddSchedule';
+import AutomationControl from './remoteControl/AutomationControl';
 
 export {
     Home,
@@ -11,5 +13,7 @@ export {
     Scripts,
     Environment,
     RemoteControl,
-    Schedule
+    Schedule,
+    AddSchedule,
+    AutomationControl
 }

@@ -20,7 +20,11 @@ const settings = require('../assets/icons/Settings.png');
 const pumps = require('../assets/icons/Pumps.png');
 const fan = require('../assets/icons/Fan.png');
 const integration = require('../assets/icons/Integration.png');
-
+const add = require('../assets/icons/Add.png');
+const checkTrue = require('../assets/icons/CheckTrue.png');
+const automation = require('../assets/icons/Automation.png');
+const manualAdjustment = require('../assets/icons/ManualAdjustment.png');
+const minus = require('../assets/icons/Minus.png');
 
 
 
@@ -46,5 +50,10 @@ export default {
   settings,
   pumps,
   fan,
-  integration
+  integration,
+  add,
+  checkTrue,
+  automation,
+  manualAdjustment,
+  minus
 };

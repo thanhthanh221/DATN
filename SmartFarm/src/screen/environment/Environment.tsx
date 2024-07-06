@@ -9,19 +9,7 @@ import {
 import React from 'react';
 import {COLORS, icons, SIZES} from '../../constants';
 import {Header, IconButton} from '../../components';
-
-type Props = {
-  navigation: any; // Thay đổi kiểu tùy thuộc vào cách bạn định nghĩa navigation
-};
-
-interface Env {
-  SoilHumidity: number;
-  Temperature: number;
-  Lux: number;
-  CO2: number;
-  AirHumidity: number;
-  DatimeUpdate: Date;
-}
+import {BaseUri} from '../../utils';
 
 interface EnvStatusData {
   icon: ImageSourcePropType;
@@ -40,15 +28,32 @@ const Environment: React.FC<Props> = ({navigation}) => {
   });
 
   React.useEffect(() => {
-    setEnv({
-      SoilHumidity: 11.52,
-      Lux: 996,
-      Temperature: 26,
-      CO2: 17.27,
-      AirHumidity: 50,
-      DatimeUpdate: new Date(2024, 10, 23, 10, 30),
+    BaseUri.get('smartfarm/v1/api/enviroment').then(response => {
+      const data = response.data;
+
+      const parsedData: Env = {
+        SoilHumidity: data.soilHumidity,
+        Lux: data.lux,
+        Temperature: data.temperature,
+        CO2: data.cO2,
+        AirHumidity: data.airHumidity,
+        DatimeUpdate: new Date(data.datimeUpdate),
+      };
+      setEnv(parsedData);
     });
   }, []);
+
+  const UpdateDateTimeEnvroment = () => {
+    const parsedData: Env = {
+      SoilHumidity: env.SoilHumidity,
+      Lux: env.Lux,
+      Temperature: env.Temperature,
+      CO2: env.CO2,
+      AirHumidity: env.AirHumidity,
+      DatimeUpdate: new Date(),
+    };
+    setEnv(parsedData);
+  };
 
   const EnvStatus: React.FC<EnvStatusData> = ({icon, type, value}) => {
     return (
@@ -82,7 +87,7 @@ const Environment: React.FC<Props> = ({navigation}) => {
             style={{
               fontWeight: '500',
               fontSize: 16,
-              color:COLORS.darkGray
+              color: COLORS.darkGray,
             }}>
             {type}
           </Text>
@@ -249,10 +254,10 @@ const Environment: React.FC<Props> = ({navigation}) => {
                 marginTop: SIZES.base - 3,
                 fontWeight: '500',
                 fontSize: 18,
-                color:COLORS.darkGray
+                color: COLORS.darkGray,
               }}>
               {env.DatimeUpdate.getDate()}/{env.DatimeUpdate.getMonth() + 1}/
-              {env.DatimeUpdate.getFullYear()},{env.DatimeUpdate.getHours()}:
+              {env.DatimeUpdate.getFullYear()} - {env.DatimeUpdate.getHours()}:
               {env.DatimeUpdate.getMinutes()}
             </Text>
 
@@ -265,7 +270,8 @@ const Environment: React.FC<Props> = ({navigation}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: SIZES.base,
-              }}>
+              }}
+              onPress={() => UpdateDateTimeEnvroment()}>
               <Text
                 style={{
                   color: COLORS.white,

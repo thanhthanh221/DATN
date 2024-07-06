@@ -1,92 +1,45 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {COLORS, icons, SIZES} from '../../constants';
 import {IconButton} from '../../components';
-
-type Props = {
-  navigation: any;
-};
-export interface ScheduleSmartFarm {
-  id: number;
-  statusSchedule: number;
-  infomations: Action[];
-  dateTimeAction: Date;
-  status: boolean;
-}
-export interface Action {
-  infomation: string;
-  status: boolean;
-}
+import {BaseUri} from '../../utils';
+import {Loading} from '../../utils/utils';
 
 const Schedule: React.FC<Props> = ({navigation}) => {
-  const scheduleAll: ScheduleSmartFarm[] = [
-    {
-      id: 1,
-      statusSchedule: 1,
-      infomations: [
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-      ],
-      dateTimeAction: new Date(2024, 11, 28, 11, 30),
-      status: true,
-    },
-    {
-      id: 2,
-      statusSchedule: 2,
-      infomations: [
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-      ],
-      dateTimeAction: new Date(2024, 11, 28, 11, 30),
-      status: true,
-    },
-    {
-      id: 3,
-      statusSchedule: 2,
-      infomations: [
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-      ],
-      dateTimeAction: new Date(2024, 11, 28, 11, 30),
-      status: true,
-    },
-    {
-      id: 4,
-      statusSchedule: 2,
-      infomations: [
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-        {
-          infomation: 'Bật máy bơm nước',
-          status: true,
-        },
-      ],
-      dateTimeAction: new Date(2024, 11, 28, 11, 30),
-      status: true,
-    },
-  ];
-  const [schedulePage, setSchedule] =
-    React.useState<ScheduleSmartFarm[]>(scheduleAll);
+  const [schedulePage, setSchedule] = React.useState<ScheduleSmartFarm[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    BaseUri.get('smartfarm/v1/api/schedule?take=20&skip=0').then(response => {
+      const data = response.data;
+
+      // Convert to ScheduleSmartFarm objects and save to user state
+      const schedules: ScheduleSmartFarm[] = data.map((item: any) => ({
+        id: item.id, // Ensure this is a number
+        statusSchedule: item.statusSchedule || 0, // Default value or ensure this is a number
+        infomations: item.infomations.map((info: any) => ({
+          infomation: info.infomation,
+          status: info.status,
+        })),
+        dateTimeAction: new Date(item.dateTimeAction),
+        status: item.status || false, // Default value or ensure this is a boolean
+      }));
+
+      setIsLoading(false);
+      setSchedule(schedules);
+    });
+  }, [schedulePage]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <View>
@@ -99,167 +52,198 @@ const Schedule: React.FC<Props> = ({navigation}) => {
           alignItems: 'center',
           flexDirection: 'row',
           marginBottom: SIZES.radius,
+          justifyContent: 'space-between',
         }}>
+        {/* Left */}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <IconButton
+            iconStyle={{
+              marginLeft: SIZES.radius,
+              marginRight: SIZES.radius * 2,
+            }}
+            icon={icons.back}
+            onPress={() => navigation.goBack()}
+          />
+          {/* Text header */}
+          <Text
+            style={{
+              fontWeight: '700',
+              fontSize: 18,
+              color: COLORS.darkGray2,
+            }}>
+            LỊCH TRÌNH
+          </Text>
+        </View>
+
         <IconButton
           iconStyle={{
             marginLeft: SIZES.radius,
             marginRight: SIZES.radius * 2,
           }}
-          icon={icons.back}
-          onPress={() => navigation.goBack()}
+          icon={icons.add}
+          onPress={() => navigation.navigate('addschedule')}
         />
-        {/* Text header */}
-        <Text
-          style={{
-            fontWeight: '700',
-            fontSize: 18,
-            color: COLORS.darkGray2,
-          }}>
-          LỊCH TRÌNH
-        </Text>
       </View>
 
       {/* Schedule */}
-      <View
-        style={{
-          marginLeft: SIZES.radius,
-        }}>
-        <View
-          style={{
-            backgroundColor: COLORS.primary,
-            width: SIZES.width * 0.5,
-            height: 40,
-            borderTopRightRadius: 20,
-            borderBottomRightRadius: 20,
-            justifyContent: 'center',
-          }}>
-          <Text
-            style={{
-              marginLeft: SIZES.radius,
-              color: COLORS.white,
-              fontWeight: '600',
-              fontSize: 16,
-            }}>
-            05/5/2024 - 10:30:00
-          </Text>
-        </View>
-
-        {/* Bot */}
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          {/* Line */}
-          <View
-            style={{
-              height: 400,
-              width: 1,
-              backgroundColor: COLORS.primary,
-            }}
-          />
-          {/* Status */}
-          <View
-            style={{
-              width: SIZES.width * 0.87,
-              height: 300,
-              backgroundColor: COLORS.white,
-              marginTop: SIZES.radius * 2,
-              marginLeft: SIZES.radius * 2,
-              borderRadius: SIZES.radius * 2,
-            }}>
-            <Image
-              source={icons.schedule}
-              style={{
-                width: 45,
-                height: 45,
-                tintColor: COLORS.primary,
-                marginRight: SIZES.radius,
-                left: '80%',
-                top: 20,
-              }}
-            />
-
-            {/* Thông tin lịch */}
-            <Text
-              style={{
-                marginLeft: SIZES.radius * 1.4,
-                fontSize: 15,
-              }}>
-              Thông tin:
-            </Text>
-
-            <View
-              style={{
-                top: '44%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginHorizontal: SIZES.radius * 2,
-              }}>
-              <View>
-                <Text
-                  style={{
-                    color: COLORS.primary,
-                    fontWeight: '700',
-                    fontSize: 16,
-                  }}>
-                  Đang chạy !
-                </Text>
-              </View>
-
-              {/* Cancel */}
-
-              <TouchableOpacity
+      <FlatList
+        data={schedulePage}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{
+          marginTop: SIZES.base,
+          paddingBottom: 200,
+        }}
+        renderItem={({item}) => {
+          return (
+            <View>
+              <View
                 style={{
-                  backgroundColor: COLORS.yellow,
-                  width: 100,
+                  backgroundColor: COLORS.primary,
+                  width: SIZES.width * 0.5,
                   height: 45,
+                  borderTopRightRadius: 20,
+                  borderBottomRightRadius: 20,
                   justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: SIZES.radius,
+                  marginLeft: SIZES.base,
                 }}>
                 <Text
                   style={{
+                    marginLeft: SIZES.radius,
+                    color: COLORS.white,
+                    fontWeight: '600',
                     fontSize: 16,
-                    fontWeight: '800',
-                    color: COLORS.lightGray2,
                   }}>
-                  Hủy
+                  {`${item.dateTimeAction.getDate()}/${item.dateTimeAction.getMonth()}/${item.dateTimeAction.getFullYear()} - ${item.dateTimeAction.getHours()}:${item.dateTimeAction.getMinutes()}:${item.dateTimeAction.getSeconds()}`}
                 </Text>
-              </TouchableOpacity>
+              </View>
+
+              {/* Status */}
+              <View
+                style={{
+                  width: SIZES.width * 0.87,
+                  backgroundColor: COLORS.white,
+                  marginTop: SIZES.radius * 2,
+                  marginLeft: SIZES.radius * 2,
+                  borderRadius: SIZES.radius * 2,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  minHeight: 130,
+                  height: 170,
+                  borderWidth: 1,
+                }}>
+                <View>
+                  {item.infomations.map((i, index) => {
+                    return (
+                      <View
+                        key={`check-${index}`}
+                        style={{
+                          flexDirection: 'row',
+                          marginLeft: SIZES.radius * 2,
+                          alignItems: 'center',
+                          marginVertical: 5,
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: '600',
+                            marginRight: 10,
+                          }}>
+                          {i.infomation} :
+                        </Text>
+                        <Text
+                          style={{
+                            color: i.status ? COLORS.primary : COLORS.red,
+                            fontSize: 18,
+                            fontWeight: '700',
+                          }}>
+                          {i.status ? 'BẬT' : 'TẮT'}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+
+                <Image
+                  source={icons.schedule}
+                  style={{
+                    width: 45,
+                    height: 45,
+                    tintColor: COLORS.primary,
+                    marginRight: SIZES.radius,
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginHorizontal: SIZES.radius * 2,
+                  marginTop: 10,
+                  marginBottom: 20,
+                }}>
+                <Text
+                  style={{
+                    color:
+                      item.statusSchedule == 0
+                        ? COLORS.primary
+                        : item.statusSchedule == 1
+                        ? COLORS.orange
+                        : item.statusSchedule == 2
+                        ? COLORS.red
+                        : item.statusSchedule == 3
+                        ? COLORS.primary
+                        : COLORS.primary,
+                    fontWeight: '700',
+                    fontSize: 18,
+                  }}>
+                  {item.statusSchedule == 0
+                    ? 'Đang chạy !'
+                    : item.statusSchedule == 1
+                    ? 'Đang chờ !'
+                    : item.statusSchedule == 2
+                    ? 'Đã hủy !'
+                    : item.statusSchedule == 3
+                    ? 'Hoàn thành !'
+                    : 'Trạng thái không xác định !'}
+                </Text>
+
+                {/* Cancel */}
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor:
+                      item.statusSchedule === 1
+                        ? COLORS.yellow
+                        : COLORS.lightGray2,
+                    width: 100,
+                    height: 45,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: SIZES.radius,
+                  }}
+                  disabled={item.statusSchedule !== 1}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: '800',
+                      color: COLORS.lightGray2,
+                    }}>
+                    Hủy
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </View>
-
-        <View
-          style={{
-            backgroundColor: COLORS.primary,
-            width: SIZES.width * 0.5,
-            height: 40,
-            borderTopRightRadius: 20,
-            borderBottomRightRadius: 20,
-            justifyContent: 'center',
-          }}>
-          <Text
-            style={{
-              marginLeft: SIZES.radius,
-              color: COLORS.white,
-              fontWeight: '600',
-              fontSize: 16,
-            }}>
-            05/5/2024 - 10:30:00
-          </Text>
-        </View>
-
-        {/* Line */}
-        <View
-          style={{
-            height: 400,
-            width: 1,
-            backgroundColor: COLORS.primary,
-          }}
-        />
-      </View>
+          );
+        }}
+      />
     </View>
   );
 };
