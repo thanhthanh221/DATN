@@ -1,5 +1,5 @@
 namespace WebServer.Dto;
-public class CreateEnviromentDto : BaseDto
+public class CreateUpdateEnviromentDto : BaseDto
 {
     public int SoilHumidity { get; set; }
     public int Lux { get; set; }

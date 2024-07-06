@@ -10,17 +10,13 @@ import React from 'react';
 import {COLORS, constants, icons, SIZES} from '../../constants';
 import {Header, IconButton} from '../../components';
 
-type Props = {
-  navigation: any;
-};
-
 const RemoteControl: React.FC<Props> = ({navigation}) => {
   return (
     <View
       style={{
         flex: 1,
         borderRadius: SIZES.radius,
-        backgroundColor:COLORS.lightGray2
+        backgroundColor: COLORS.lightGray2,
       }}>
       <Header
         leftComponent={
@@ -80,6 +76,7 @@ const RemoteControl: React.FC<Props> = ({navigation}) => {
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
+              onPress={() => navigation.push(item.navigation)}
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -102,7 +99,7 @@ const RemoteControl: React.FC<Props> = ({navigation}) => {
                     height: 80,
                     borderRadius: 40,
                     borderWidth: 5,
-                    borderColor:COLORS.lightGray2,
+                    borderColor: COLORS.lightGray2,
                     marginTop: -40,
                     justifyContent: 'center',
                     alignItems: 'center',

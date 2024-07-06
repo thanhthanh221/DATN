@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using WebServer.Models;
@@ -30,7 +31,7 @@ public class SRepository<T> : ISRepository<T> where T : BaseEntity<Guid>
     public async Task<List<T>> GetAllAsync(string type)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var keys = GetKeyAsync(type);
+        var keys = GetKeyAsync(type + "*");
 
         var sensorDataList = new List<T>();
         foreach (var key in keys)

@@ -18,6 +18,8 @@ export const COLORS = {
   gray3: '#CFD0D7',
   lightGray1: '#DDDDDD',
   lightGray2: '#F5F5F8',
+  blue: '#0000FF',
+  brown: "#964B00"
 };
 
 export const SIZES = {

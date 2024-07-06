@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import {Environment, History, Home, RemoteControl, Schedule, Scripts} from './src/screen';
+import {AddSchedule, AutomationControl, Environment, History, Home, RemoteControl, Schedule, Scripts} from './src/screen';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +18,8 @@ const App = () => {
         <Stack.Screen name="script" component={Scripts} />
         <Stack.Screen name="remoteControl" component={RemoteControl} />
         <Stack.Screen name="schedule" component={Schedule} />
+        <Stack.Screen name="addschedule" component={AddSchedule} />
+        <Stack.Screen name="automationcontrol" component={AutomationControl} />
       </Stack.Navigator>
     </NavigationContainer>
   );

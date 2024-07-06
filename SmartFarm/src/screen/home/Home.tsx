@@ -3,10 +3,6 @@ import {View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
 import {COLORS, SIZES, constants, icons} from '../../constants';
 import {Header, IconButton} from '../../components';
 
-type Props = {
-  navigation: any; // Thay đổi kiểu tùy thuộc vào cách bạn định nghĩa navigation
-};
-
 const Home: React.FC<Props> = ({navigation}) => {
   return (
     <View
