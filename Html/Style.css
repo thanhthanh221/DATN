@@ -1,0 +1,135 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+h1 {
+    font-size: 1.8rem;
+    color: white;
+}
+h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #03630e;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #03630e;
+}
+body {
+    margin: 0;
+}
+.content {
+    padding: 30px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.card {
+    background-color: #f8f7f9;
+    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, 0.5);
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.button1,
+.button2,
+.button3 {
+    padding: 15px 50px;
+    font-size: 24px;
+    text-align: center;
+    outline: none;
+    color: #fff;
+    background-color: #ed310c;
+    border: none;
+    border-radius: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.button1:active,
+.button2:active,
+.button3:active {
+    background-color: #0f8b8d;
+    box-shadow: 2 2px #cdcdcd;
+    transform: translateY(2px);
+}
+.state1,
+.state2,
+.state3 {
+    font-size: 1.5rem;
+    color: #8c8c8c;
+    font-weight: bold;
+}
+.manual-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.sensor-box {
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    padding: 10px;
+    width: 200px;
+    height: 100px;
+    background-color: #ffffff;
+    position: relative;
+    border-width: 3px;
+    border-radius: 20px;
+}
+
+/* Định nghĩa các thuộc tính riêng biệt */
+.temperature-box {
+    border-color: red;
+}
+
+.humidity-box {
+    border-color: blue;
+}
+
+.soil-box {
+    border-color: brown;
+}
+
+.co2-box {
+    border-color: greenyellow;
+}
+
+.lux-box {
+    border-color: yellow;
+}
+.PH-box {
+    border-color: rgb(0, 195, 255);
+}
+.sensor-box img {
+    height: 60px;
+    width: 60px;
+}
+.temperature-box p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+#sensor1 {
+    color: red;
+}
+.sensor-container-1 {
+    display: flex;
+    justify-content: space-around; /* Để căn đều khoảng cách giữa các phần tử */
+    align-items: center; /* Để căn giữa theo chiều dọc */
+    margin: 20px 0;
+}
+.sensor-container-2 {
+    display: flex;
+    justify-content: space-around; /* Để căn đều khoảng cách giữa các phần tử */
+    align-items: center; /* Để căn giữa theo chiều dọc */
+    margin: 20px 0;
+}

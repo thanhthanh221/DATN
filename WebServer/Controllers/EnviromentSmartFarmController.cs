@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebServer.Dto;
 using WebServer.Models;
 using WebServer.Repositories;
+using WebServer.Services;
 
 namespace WebServer.Controllers;
 [ApiController]
@@ -9,18 +10,27 @@ namespace WebServer.Controllers;
 public class EnviromentSmartFarmController : ControllerBase
 {
     private readonly ISRepository<EnviromentSmartFarm> enviromentRepository;
+    private readonly IEspServiceClient espServiceClient;
 
-    public EnviromentSmartFarmController(ISRepository<EnviromentSmartFarm> enviromentRepository)
+    public EnviromentSmartFarmController(
+        ISRepository<EnviromentSmartFarm> enviromentRepository,
+        IEspServiceClient espServiceClient)
     {
         this.enviromentRepository = enviromentRepository;
+        this.espServiceClient = espServiceClient;
     }
 
     [HttpGet]
     public async Task<ActionResult<EnviromentSmartFarm>> GetEnviromentAsync()
     {
-        var enviroment = (await enviromentRepository.GetAllAsync(nameof(EnviromentSmartFarm)))
-                        .OrderByDescending(e => e.DatimeUpdate).FirstOrDefault();
-        return Ok(enviroment);
+
+        var enviromentInEsp = await espServiceClient.GetEnviromentStatusInEsp();
+
+        EnviromentSmartFarm newEnviroment = new(enviromentInEsp.SoilHumidity, enviromentInEsp.Lux, enviromentInEsp.Temperature, enviromentInEsp.CO2, enviromentInEsp.AirHumidity);
+
+        await enviromentRepository.CreateAsync(newEnviroment);
+
+        return Ok(newEnviroment);
     }
 
     [HttpPost]
@@ -39,14 +49,17 @@ public class EnviromentSmartFarmController : ControllerBase
 
         Random rand = new();
 
-
-
-        EnviromentSmartFarm enviromentUpdate = new() {
+        EnviromentSmartFarm enviromentUpdate = new()
+        {
             Id = enviromentId,
-            SoilHumidity = rand.Next(15,20)
-
+            SoilHumidity = rand.Next(15, 20),
+            Lux = rand.Next(15, 40),
+            Temperature = rand.Next(50, 100),
+            CO2 = rand.Next(50, 400),
+            AirHumidity = rand.Next(50, 70),
+            DatimeUpdate = DateTime.Now
         };
-        await enviromentRepository.CreateAsync(enviroment);
+        await enviromentRepository.UpdateAsync(enviroment);
         return Ok(enviroment);
     }
 }

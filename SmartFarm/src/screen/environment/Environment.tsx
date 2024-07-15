@@ -40,6 +40,8 @@ const Environment: React.FC<Props> = ({navigation}) => {
         DatimeUpdate: new Date(data.datimeUpdate),
       };
       setEnv(parsedData);
+
+      console.log(data);
     });
   }, []);
 

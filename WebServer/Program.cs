@@ -1,5 +1,6 @@
 using StackExchange.Redis;
 using WebServer.Repositories;
+using WebServer.Services;
 using WebServer.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen(c =>
 var redisConfiguration = builder.Configuration.GetSection("Redis").Get<RedisOptions>();
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConfiguration.ConnectionString));
 builder.Services.AddScoped(typeof(ISRepository<>), typeof(SRepository<>));
+builder.Services.AddScoped<IEspServiceClient, EspServiceClient>();
 
 // CORS
 builder.Services.AddCors(options =>
